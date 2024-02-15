@@ -1,2 +1,2 @@
 # SlickOilGame.github.io
-To publish the skick oil game on the web
+To publish the slick oil game on the web
