@@ -334,7 +334,7 @@
         pr.setAttributeNS(null,"width",(130 * deli) / demand)
         // progress percent
         pr = document.getElementById("percent")
-        pr.childNodes[0].nodeValue = ((100*deli) / demand)+"%"
+        pr.childNodes[0].nodeValue = ((100*delivered) / demand)+"%"
     
         // cost
         document.getElementById("cost").childNodes[0].nodeValue = "Total cost: $"+cost
