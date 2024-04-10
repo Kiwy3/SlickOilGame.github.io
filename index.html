@@ -112,6 +112,7 @@
     }
     
     const xmlns="http://www.w3.org/2000/svg"
+
     function add_element(name,attributes,father) {
         var E = document.createElementNS(xmlns,name)
         for (let i = 0; i < attributes.length; i++) {
@@ -231,19 +232,28 @@
             L = add_line(x1,y1,x2,y2)
             L.setAttributeNS(null,"id",link_id(link))
             L.setAttributeNS(null,"onclick","select_link("+i+")")
-            slinks[i] = {y: -(y1+2*y2)/3, index: i}
+            // x2,y2 are alternate position in case of clash
+            slinks[i] = {x: (x1+2*x2)/3, x2: (2*x1+x2)/3, 
+                        y: (y1+2*y2)/3,  y2: (2*y1+y2)/3, index: i}
         }
     
-        // menus, links are sorted from bottom to top to have the menus on top of each other
-        slinks.sort((a,b) => {return a.y - b.y})
-        // the menu after the lines so they are above
+        // menus, links are sorted from bottom to top to have the menus on top of each other when opened
+        slinks.sort((a,b) => {return b.y - a.y})
+        	
+        // look for menus at the same location (clash) and relocated
+        for (let i = 0; i < slinks.length-1; i++) {
+            if (slinks[i].y == slinks[i+1].y) {
+                slinks[i].x = slinks[i].x2
+                slinks[i].y = slinks[i].y2
+                slinks[i+1].x = slinks[i+1].x2
+                slinks[i+1].y = slinks[i+1].y2
+            }
+        }
+
         for (let slink of slinks) {
             let i = slink.index
             var link = links[i]
-            var x1 = wx+150; var y1 = wy+link.well*dy
-            var x2 = rx-40; var y2 = ry+link.refinerie*dy
-            var x = (x1+2*x2)/3; var y = (y1+2*y2)/3
-            build_flow_menu(link,x,y,i)
+            build_flow_menu(link,slink.x,slink.y,i)
         }
     
         // refinerie customer lines
