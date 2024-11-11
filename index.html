@@ -143,7 +143,7 @@
     }
     
     function build_site(type,x,y,object,index) {
-        graphic = graphics.get(type)
+        graphic = graphics.get(type) // graphic chart for this element
         if (object == null) index = ""
         // the oval, small circles and grey progress rectangle
         E = add_element("use",[["href", "#"+type],["id",type+index],["x",x],["y",y], ["fill",graphic.back]])
@@ -400,16 +400,17 @@
         update()
     }
     
+    // the main function called on creation of the SVG canvas
     function create(){
         svg_element = document.getElementById("SlickOil")
-        // removes the menus when clicking outside objects
+        // redraw to remove the menus when clicking outside any graphical object
         svg_element.addEventListener('click', function(e) {if (e.target == svg_element) update()}); 
-        dy = 100
-        wx = 50; wy = 100
+        dy = 100 // vertical spacing
+        wx = 50; wy = 100 // first well position
         build_sites(wells,wx,wy,dy,"well")
-        rx = 650; ry = 150
+        rx = 650; ry = 150 // first refinerie position
         build_sites(refineries,rx,ry,dy,"refinerie")
-        cx = 1000; cy = 350
+        cx = 1000; cy = 350 // customer position
         build_site("customer",cx,cy)
         build_links(links,wx,wy,rx,ry,dy,refineries,cx,cy)
     
@@ -542,9 +543,9 @@
   </g>
 
 
-    <circle id="reset" cx="1200" cy="500" r="20" fill="lightgrey" stroke="white" onclick="reset()" />
-    <use href="#reset-icon" x="1180" y="480" />
-    <text x="1230" y="505" font-size="20" font-weight="bold" font-style="italic" font-family="Arial" pointer-events="None">
+    <circle id="reset" cx="1300" cy="350" r="20" fill="lightgrey" stroke="white" onclick="reset()" />
+    <use href="#reset-icon" x="1282" y="332" onclick="reset()"/>
+    <text x="1330" y="355" font-size="20" font-weight="bold" font-style="italic" font-family="Arial" pointer-events="None">
     Reset game
     </text>
     
