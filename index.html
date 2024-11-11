@@ -385,12 +385,57 @@
     
     }
     
+    function updateSolutionText(text) {
+        var solutionText = document.getElementById("solutionText")
+        solutionText.innerHTML = text
+    }
+
+    function updateSolution() {
+        var text = "<p>"+delivered+" barrels delivered, " 
+        if (delivered < demand) {
+            text += (demand - delivered)+" missing"
+        }
+        else if (delivered > demand) {
+            text += (delivered-demand)+" over delivered"
+        }
+        else {
+            text += "full delivery"
+        }
+        text += "<br>Cost: $"+cost+"</p>"
+
+        // display the flows
+        text += "<p>"
+        for (let link of links) {
+            if (link.flow > 0) {
+                text += "well "+wells[link.well].name+" to refinerie "+refineries[link.refinerie].name+": "+link.flow+" barrels<br>"
+            }
+        }
+        text += "</p>"
+
+        // display over capacities
+        text += "<p>"
+        for (let well of wells) {
+            if (well.used > well.capacity) {
+                text += "Well "+well.name+" over capacity by "+(well.used-well.capacity)+" barrels<br>"
+            }
+        }	
+        for (let refinerie of refineries) {
+            if (refinerie.used > refinerie.capacity) {
+                text += "Refinerie "+refinerie.name+" over capacity by "+(refinerie.used-refinerie.capacity)+" barrels<r>"
+            }
+        }
+        text += "</p>"
+
+        updateSolutionText(text)
+    }
+    
     function update() {
         update_model()
         update_sites(wells,"well")
         update_sites(refineries,"refinerie")
         update_links(links)
         update_demand()
+        updateSolution()
     }
     
     function reset() {
@@ -548,6 +593,13 @@
     <text x="1330" y="355" font-size="20" font-weight="bold" font-style="italic" font-family="Arial" pointer-events="None">
     Reset game
     </text>
+
+    <rect x="970" y="450" width="550" height="200" stroke="black" fill="lightgrey" />
+    <foreignObject x="970" y="450" width="550" height="200">
+        <div xmlns="http://www.w3.org/1999/xhtml" id="solutionText" style="width: 550px; height: 200px; overflow: auto; border: 1px solid black; padding: 10px;">            
+        </div>
+    </foreignObject>
+
     
 </svg>
 <p>See also <a href="https://miketalksai.substack.com/p/slick-oil-is-back-online" target="_blank">Mike Watson's blog</a></p>
